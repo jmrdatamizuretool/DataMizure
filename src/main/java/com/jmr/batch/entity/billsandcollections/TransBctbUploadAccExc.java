@@ -1,7 +1,7 @@
 package com.jmr.batch.entity.billsandcollections;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.jmr.batch.entity.loan.TransCltbAcCompUploadPK;
+
 
 /**
  * The persistent class for the BCTB_UPLOAD_ACC_EXC database table.
