@@ -204,8 +204,6 @@ public class TransIctmUploadTdpayinDet implements Serializable{
 
 		public void setRouting_no(String routing_no) {
 			this.routing_no = routing_no;
-		}
-
-				
+		}		
 
 }
