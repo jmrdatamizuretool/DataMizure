@@ -14,12 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.jmr.batch.entity.ErrorLogVb;
-import com.jmr.batch.entity.billsandcollections.TransBctbUploadDocs;
-import com.jmr.batch.model.billsandcollections.TransBctbUploadDocsModel;
+import com.jmr.batch.entity.billsandcollections.TransBctbUploadMaster;
+import com.jmr.batch.model.billsandcollections.TransBctbUploadMasterModel;
 import com.jmr.repository.ErrorLogRepository;
 
 @Component
-public class SkipListenerBctbUploadDocs {
+public class SkipListenerBctbUploadMaster {
 	
 	@Autowired
 	private ErrorLogRepository repo;
@@ -44,14 +44,13 @@ public class SkipListenerBctbUploadDocs {
 	}
 	
 	@OnSkipInProcess
-    public void skipInProcess(TransBctbUploadDocsModel model, Throwable th) {
+    public void skipInProcess(TransBctbUploadMasterModel model, Throwable th) {
         String path = getErrorLog();
         String process_err_path = path + System.getProperty("file.separator") + "SkipInProcess.txt";
 
         String data = "SOURCE_CODE:\t" + model.getSource_code() + "\tSOURCE_CODE:" +
                       "BRANCH_CODE:\t" + model.getBranch_code() + "\tBRANCH_CODE:" +
                       "SOURCE_REF:\t" + model.getSource_ref() + "\tSOURCE_REF:" +
-                      "DOC_CODE:\t" + model.getDoc_code() + "\tDOC_CODE:" +
                       "SOURCE_SEQ_NO:\t" + model.getSource_seq_no() + "\tSOURCE_SEQ_NO:" +
                       "\tException:" + th.getMessage();
 
@@ -59,15 +58,14 @@ public class SkipListenerBctbUploadDocs {
     }
 
     @OnSkipInWrite
-    public void skipInWriter(TransBctbUploadDocs entity, Throwable th) {
+    public void skipInWriter(TransBctbUploadMaster entity, Throwable th) {
         String path = getErrorLog();
         String write_err_path = path + System.getProperty("file.separator") + "SkipInWrite.txt";
 
-        String data = "SOURCE_CODE:\t" + entity.getTransBctbUploadDocsPK().getSourceCode() + "\tSOURCE_CODE:" +
-                      "BRANCH_CODE:\t" + entity.getTransBctbUploadDocsPK().getBranchCode() + "\tBRANCH_CODE:" +
-                      "SOURCE_REF:\t" + entity.getTransBctbUploadDocsPK().getSourceRef() + "\tSOURCE_REF:" +
-                      "DOC_CODE:\t" + entity.getTransBctbUploadDocsPK().getDocCode() + "\tDOC_CODE:" +
-                      "SOURCE_SEQ_NO:\t" + entity.getTransBctbUploadDocsPK().getSourceSeqNo() + "\tSOURCE_SEQ_NO:" +
+        String data = "SOURCE_CODE:\t" + entity.getId().getSourceCode() + "\tSOURCE_CODE:" +
+                      "BRANCH_CODE:\t" + entity.getId().getBranchCode() + "\tBRANCH_CODE:" +
+                      "SOURCE_REF:\t" + entity.getId().getSourceRef() + "\tSOURCE_REF:" +
+                      "SOURCE_SEQ_NO:\t" + entity.getId().getSourceSeqNo() + "\tSOURCE_SEQ_NO:" +
                       "\tException:" + th.getMessage();
 
         createFile(write_err_path, data);
@@ -96,7 +94,7 @@ public class SkipListenerBctbUploadDocs {
 		}
 	}
 	public String getErrorLog() {
-		Optional<ErrorLogVb> errorLogVb = repo.findById("BCTB_UPLOAD_DOCS");
+		Optional<ErrorLogVb> errorLogVb = repo.findById("BCTB_UPLOAD_MASTER");
 		String errLogPath = errorLogVb.get().getError_log_path();
 		File errorLog = new File(errLogPath); 
 		if(!errorLog.exists()) {	

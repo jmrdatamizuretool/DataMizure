@@ -18,7 +18,7 @@ public class TransBctbUploadReserve implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private TransBctbUploadReservePK transBctbUploadPayExcPK;
+	private TransBctbUploadReservePK transBctbUploadReservePK;
 	
 	 @Column(name = "under_reserve_flag")
 	    private String underReserveFlag;
@@ -62,12 +62,12 @@ public class TransBctbUploadReserve implements Serializable {
 	    @Column(name = "tracer_receiver_partytype")
 	    private String tracerReceiverPartyType;
 
-		public TransBctbUploadReservePK getTransBctbUploadPayExcPK() {
-			return transBctbUploadPayExcPK;
+		public TransBctbUploadReservePK getTransBctbUploadReservePK() {
+			return transBctbUploadReservePK;
 		}
 
-		public void setTransBctbUploadPayExcPK(TransBctbUploadReservePK transBctbUploadPayExcPK) {
-			this.transBctbUploadPayExcPK = transBctbUploadPayExcPK;
+		public void setTransBctbUploadPayExcPK(TransBctbUploadReservePK transBctbUploadReservePK) {
+			this.transBctbUploadReservePK = transBctbUploadReservePK;
 		}
 
 		public String getUnderReserveFlag() {
