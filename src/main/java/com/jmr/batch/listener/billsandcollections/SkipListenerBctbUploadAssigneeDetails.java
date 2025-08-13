@@ -1,9 +1,11 @@
 package com.jmr.batch.listener.billsandcollections;
 
-import com.jmr.batch.entity.ErrorLogVb;
-import com.jmr.batch.entity.billsandcollections.TransBctbUploadParties;
-import com.jmr.batch.model.billsandcollections.TransBctbUploadPartiesModel;
-import com.jmr.repository.ErrorLogRepository;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Optional;
+
 import org.springframework.batch.core.annotation.OnSkipInProcess;
 import org.springframework.batch.core.annotation.OnSkipInRead;
 import org.springframework.batch.core.annotation.OnSkipInWrite;
@@ -11,15 +13,14 @@ import org.springframework.batch.item.file.FlatFileParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Optional;
+import com.jmr.batch.entity.ErrorLogVb;
+import com.jmr.batch.entity.billsandcollections.TransBctbUploadAssigneeDetails;
+import com.jmr.batch.model.billsandcollections.TransBctbUploadAssigneeDetailsModel;
+import com.jmr.repository.ErrorLogRepository;
 
 @Component
-public class SkipListenerBctbUploadParties {
-
+public class SkipListenerBctbUploadAssigneeDetails {
+	
 	@Autowired
 	private ErrorLogRepository repo;
 	@OnSkipInRead
@@ -41,41 +42,39 @@ public class SkipListenerBctbUploadParties {
 				((FlatFileParseException) th).getLineNumber());
 		}
 	}
-
+	
 	@OnSkipInProcess
-	public void skipInProcess(TransBctbUploadPartiesModel model, Throwable th) {
-	    String path = getErrorLog();
-	    String processErrPath = path + File.separator + "SkipInProcess_Parties.txt";
+    public void skipInProcess(TransBctbUploadAssigneeDetailsModel model, Throwable th) {
+        String path = getErrorLog();
+        String processErrPath = path + File.separator + "SkipInProcess.txt";
 
-	    String data = "BRANCH_CODE:\t" + model.getBranch_code() +
-	                  "\tSOURCE_REF:\t" + model.getSource_ref() +
-	                  "\tPARTY_TYPE:\t" + model.getParty_type() +
-	                  "\tPARTY_NAME:\t" + model.getParty_name() +
-	                  "\tPARTY_ID:\t" + model.getParty_id() +
-	                  "\tCONV_STATUS:\t" + model.getConv_status() +
-	                  "\tException: " + th.getMessage();
+        String data = "BRANCH_CODE:\t" + model.getBranch_code() +
+                      "\tSOURCE_CODE:\t" + model.getSource_code() +
+                      "\tSOURCE_REF:\t" + model.getSource_ref() +
+                      "\tSOURCE_SEQ_NO:\t" + model.getSource_seq_no() +
+                      "\tSEQUENCE:\t" + model.getSequence() +
+                      "\tException: " + th.getMessage();
 
-	    createFile(processErrPath, data);
-	}
+        createFile(processErrPath, data);
+    }
 
-	@OnSkipInWrite
-	public void skipInWrite(TransBctbUploadParties entity, Throwable th) {
-	    String path = getErrorLog();
-	    String writeErrPath = path + File.separator + "SkipInWrite_Parties.txt";
+    @OnSkipInWrite
+    public void skipInWriter(TransBctbUploadAssigneeDetails entity, Throwable th) {
+        String path = getErrorLog();
+        String writeErrPath = path + File.separator + "SkipInWrite.txt";
 
-	    String data = "BRANCH_CODE:\t" + entity.getId().getBranchCode() +
-	                  "\tSOURCE_CODE:\t" + entity.getId().getSourceCode() +
-	                  "\tSOURCE_REF:\t" + entity.getId().getSourceRef() +
-	                  "\tPARTY_TYPE:\t" + entity.getId().getPartyType() +
-	                  "\tPARTY_NAME:\t" + entity.getPartyName() +
-	                  "\tPARTY_ID:\t" + entity.getPartyId() +
-	                  "\tCONV_STATUS:\t" + entity.getConvStatus() +
-	                  "\tException: " + th.getMessage();
+        String data = "BRANCH_CODE:\t" + entity.getTransBctbUploadAssigneeDetailsPK().getBranchCode() +
+                      "\tSOURCE_CODE:\t" + entity.getTransBctbUploadAssigneeDetailsPK().getSourceCode() +
+                      "\tSOURCE_REF:\t" + entity.getTransBctbUploadAssigneeDetailsPK().getSourceRef() +
+                      "\tSOURCE_SEQ_NO:\t" + entity.getTransBctbUploadAssigneeDetailsPK().getSourceSeqNo() +
+                      "\tSEQUENCE:\t" + entity.getTransBctbUploadAssigneeDetailsPK().getSequence() +
+                      "\tException: " + th.getMessage();
 
-	    createFile(writeErrPath, data);
-	}
+        createFile(writeErrPath, data);
+    }
 
-    public void createFileRead(String filePath, String data, int line) {
+	
+	public void createFileRead(String filePath, String data, int line) {
 		try(FileWriter fileWriter = new FileWriter(new File(filePath), true)) {
 			fileWriter.write("Line number "+line+",\t"+data + ", Date:" + new Date() + "\n");
 		}catch(Exception e) {
@@ -107,4 +106,5 @@ public class SkipListenerBctbUploadParties {
 			
 		return errorLogVb.get().getError_log_path();
 	}
+
 }

@@ -11,12 +11,14 @@ import org.springframework.batch.core.annotation.OnSkipInRead;
 import org.springframework.batch.core.annotation.OnSkipInWrite;
 import org.springframework.batch.item.file.FlatFileParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.jmr.batch.entity.ErrorLogVb;
 import com.jmr.batch.entity.billsandcollections.TransBctbUploadDocsClauses;
 import com.jmr.batch.model.billsandcollections.TransBctbUploadDocsClausesModel;
 import com.jmr.repository.ErrorLogRepository;
 
+@Component
 public class SkipListenerBctbUploadDocsClauses {
 	
 	@Autowired
@@ -97,7 +99,7 @@ public class SkipListenerBctbUploadDocsClauses {
 		}
 	}
 	public String getErrorLog() {
-		Optional<ErrorLogVb> errorLogVb = repo.findById("BCTB_UPLOAD_PARTIES_ADDRESSES");
+		Optional<ErrorLogVb> errorLogVb = repo.findById("BCTB_UPLOAD_DOCS_CLAUSES");
 		String errLogPath = errorLogVb.get().getError_log_path();
 		File errorLog = new File(errLogPath); 
 		if(!errorLog.exists()) {	

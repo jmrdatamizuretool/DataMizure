@@ -20,66 +20,92 @@ import java.util.Optional;
 @Component
 public class SkipListenerBctbUploadLimits {
 
-    @Autowired
-    private ErrorLogRepository errorLogRepository;
+	@Autowired
+	private ErrorLogRepository repo;
+	@OnSkipInRead
+	public void skipInRead(Throwable th) {
+		
+		String path = getErrorLog();
+		String read_err_path = path + System.getProperty("file.separator") + "SkipInRead.txt";
+		File readErrFile = new File(read_err_path);
+		if (!readErrFile.exists()) {
+			try {
+				readErrFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(th instanceof FlatFileParseException) {
+		createFileRead(readErrFile.getAbsolutePath(), ((FlatFileParseException) th).getInput(),
+				((FlatFileParseException) th).getLineNumber());
+		}
+	}
 
-    @OnSkipInRead
-    public void onSkipInRead(Throwable t) {
-        if (t instanceof FlatFileParseException) {
-            FlatFileParseException ex = (FlatFileParseException) t;
-            String data = "READ SKIPPED: Line=" + ex.getLineNumber() +
-                          ", Input=[" + ex.getInput() + "], Reason=" + ex.getMessage();
-            writeToFile("SkipInRead.txt", data);
-        }
-    }
+	@OnSkipInProcess
+	public void skipInProcess(TransBctbUploadLimitsModel model, Throwable th) {
+	    String path = getErrorLog();
+	    String processErrPath = path + File.separator + "SkipInProcess.txt";
 
-    @OnSkipInProcess
-    public void onSkipInProcess(TransBctbUploadLimitsModel model, Throwable t) {
-        String data = "PROCESS SKIPPED: BRANCH_CODE=" + model.getBranch_code() +
-                      ", SOURCE_REF=" + model.getSource_ref() +
-                      ", PARTY_TYPE=" + model.getParty_type() +
-                      ", OPERATION=" + model.getOperation() +
-                      ", LINE=" + model.getLine() +
-                      ", LIMIT_AMOUNT=" + model.getLimit_amount() +
-                      ", ERROR=" + t.getMessage();
-        writeToFile("SkipInProcess.txt", data);
-    }
+	    String data = "BRANCH_CODE:\t" + model.getBranch_code() +
+	                  "\tSOURCE_REF:\t" + model.getSource_ref() +
+	                  "\tPARTY_TYPE:\t" + model.getParty_type() +
+	                  "\tOPERATION:\t" + model.getOperation() +
+	                  "\tLINE:\t" + model.getLine() +
+	                  "\tLIMIT_AMOUNT:\t" + model.getLimit_amount() +
+	                  "\tException: " + th.getMessage();
 
-    @OnSkipInWrite
-    public void onSkipInWrite(TransBctbUploadLimits entity, Throwable t) {
-        String data = "WRITE SKIPPED: BRANCH_CODE=" + entity.getId().getBranchCode() +
-                      ", SOURCE_CODE=" + entity.getId().getSourceCode() +
-                      ", SOURCE_REF=" + entity.getId().getSourceRef() +
-                      ", PARTY_TYPE=" + entity.getId().getPartyType() +
-                      ", OPERATION=" + entity.getId().getOperation() +
-                      ", LINE=" + entity.getLine() +
-                      ", LIMIT_AMOUNT=" + entity.getLimitAmount() +
-                      ", CONV_STATUS=" + entity.getConvStatus() +
-                      ", ERROR=" + t.getMessage();
-        writeToFile("SkipInWrite.txt", data);
-    }
+	    createFile(processErrPath, data);
+	}
 
-    private void writeToFile(String fileName, String content) {
-        String logDir = getLogPath();
-        if (logDir == null || logDir.isEmpty()) {
-            logDir = "logs"; // fallback directory
-        }
+	@OnSkipInWrite
+	public void skipInWriter(TransBctbUploadLimits entity, Throwable th) {
+	    String path = getErrorLog();
+	    String writeErrPath = path + File.separator + "SkipInWrite.txt";
 
-        File dir = new File(logDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+	    String data = "BRANCH_CODE:\t" + entity.getId().getBranchCode() +
+	                  "\tSOURCE_CODE:\t" + entity.getId().getSourceCode() +
+	                  "\tSOURCE_REF:\t" + entity.getId().getSourceRef() +
+	                  "\tPARTY_TYPE:\t" + entity.getId().getPartyType() +
+	                  "\tOPERATION:\t" + entity.getId().getOperation() +
+	                  "\tLINE:\t" + entity.getLine() +
+	                  "\tLIMIT_AMOUNT:\t" + entity.getLimitAmount() +
+	                  "\tCONV_STATUS:\t" + entity.getConvStatus() +
+	                  "\tException: " + th.getMessage();
 
-        File file = new File(dir, fileName);
-        try (FileWriter writer = new FileWriter(file, true)) {
-            writer.write(new Date() + " --> " + content + "\n");
-        } catch (IOException e) {
-            e.printStackTrace(); // optionally use logger
-        }
-    }
+	    createFile(writeErrPath, data);
+	}
 
-    private String getLogPath() {
-        Optional<ErrorLogVb> errorLogVb = errorLogRepository.findById("BCTB_UPLOAD_LIMITS");
-        return errorLogVb.map(ErrorLogVb::getError_log_path).orElse("");
-    }
+    public void createFileRead(String filePath, String data, int line) {
+		try(FileWriter fileWriter = new FileWriter(new File(filePath), true)) {
+			fileWriter.write("Line number "+line+",\t"+data + ", Date:" + new Date() + "\n");
+		}catch(Exception e) {
+			
+		}
+	}
+	public void createFile(String filePath, String data) {
+		try(FileWriter fileWriter = new FileWriter(new File(filePath), true)) {
+			fileWriter.write(data + ",\tDate:" + new Date() + "\n");
+		}catch(Exception e) {
+			
+		}
+	}
+	public void createFileProcess(String filePath, String data) {
+		
+		try(FileWriter fileWriter = new FileWriter(new File(filePath), true)) {
+			fileWriter.write(data + ",\tDate:" + new Date() + "\n");
+		}catch(Exception e) {
+			
+		}
+	}
+	public String getErrorLog() {
+		Optional<ErrorLogVb> errorLogVb = repo.findById("BCTB_UPLOAD_LIMITS");
+		String errLogPath = errorLogVb.get().getError_log_path();
+		File errorLog = new File(errLogPath); 
+		if(!errorLog.exists()) {	
+			errorLog.mkdirs();	
+		}
+			
+		return errorLogVb.get().getError_log_path();
+	}
 }
