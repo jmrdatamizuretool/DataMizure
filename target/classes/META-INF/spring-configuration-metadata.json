@@ -2,6 +2,12 @@
   "groups": [
     {
       "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.jmr.database.config.DatabaseConfig",
+      "sourceMethod": "public javax.sql.DataSource datasource() "
+    },
+    {
+      "name": "spring.datasource",
       "type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties",
       "sourceType": "com.jmr.database.config.DatabaseConfig",
       "sourceMethod": "public org.springframework.boot.autoconfigure.jdbc.DataSourceProperties firstDataSourceProperties() "

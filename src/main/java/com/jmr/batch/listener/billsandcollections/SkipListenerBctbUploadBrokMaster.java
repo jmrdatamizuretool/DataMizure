@@ -11,12 +11,14 @@ import org.springframework.batch.core.annotation.OnSkipInRead;
 import org.springframework.batch.core.annotation.OnSkipInWrite;
 import org.springframework.batch.item.file.FlatFileParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.jmr.batch.entity.ErrorLogVb;
 import com.jmr.batch.entity.billsandcollections.TransBctbUploadBrokMaster;
 import com.jmr.batch.model.billsandcollections.TransBctbUploadBrokMasterModel;
 import com.jmr.repository.ErrorLogRepository;
 
+@Component
 public class SkipListenerBctbUploadBrokMaster {
 	
 	@Autowired
