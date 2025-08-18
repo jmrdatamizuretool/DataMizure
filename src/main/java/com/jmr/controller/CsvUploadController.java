@@ -132,7 +132,88 @@ public class CsvUploadController {
 	// BILLS AND COLLECTIONS Jobs
 	@Autowired
 	private Job bctbUploadPartiesJob;
+	
+	@Autowired
+	private Job bctbUploadLimitsJob;
+	
+	@Autowired
+	private Job bctbUploadPartiesAddressesJob;
+	
+	@Autowired
+	private Job bctbUploadDocsClausesJob;
+	
+	@Autowired
+	private Job bctbUploadInvoiceDetailJob;
+	
+	@Autowired
+	private Job bctbUploadDraftsDetailsJob;
+	
+	@Autowired
+	private Job bctbUploadFftJob;
+	
+	@Autowired
+	private Job ldtbUploadLinkagesJob;
+	
+	@Autowired
+	private Job tftbUploadFxLinkageJob;
+	
+	@Autowired
+	private Job bctmUploadLoanIccfJob;
+	
+	@Autowired
+	private Job bctbUploadMasterJob;
+	
+	@Autowired
+	private Job bctbUploadGoodsJob;
+	
+	@Autowired
+	private Job bctbUploadShipmentInfoJob;
+	
+	@Autowired
+	private Job bctbUploadPayExcJob;
+	
+	@Autowired
+	private Job bctbUploadPayFateJob;
+	
+	@Autowired
+	private Job bctbUploadAccExcJob;
+	
+	@Autowired
+	private Job bctbUploadAccFateJob;
+	
+	@Autowired
+	private Job bctbUploadReserveJob;
+	
+	@Autowired
+	private Job bctbUploadInvoiceMasterJob;
+	
+	@Autowired
+	private Job bctbUploadInsuranceJob;
+	
+	@Autowired
+	private Job bctmUploadLoanPreferenceJob;
 
+	@Autowired
+	private Job lctbUploadCollateralJob;
+	
+	@Autowired
+	private Job bctbUploadPackCreditDtlsJob;
+	
+	@Autowired
+	private Job bctbUploadBrokMasterJob;
+	
+	@Autowired
+	private Job bctbUploadBrokDetailJob;
+	
+	@Autowired
+	private Job bctbUploadMultitnrJob;
+	
+	@Autowired
+	private Job lctbUploadLicUtlDtlJob;
+	
+	@Autowired
+	private Job bctbUploadAssigneeDetailsJob;
+	
 	// TDRD Jobs
 	@Autowired
 	private Job tdrdsttbuploadcustaccount;
@@ -885,10 +966,581 @@ public class CsvUploadController {
 
 		return jobExecution.getStatus();
 	}
+	
+	//2.BCTB_UPLOAD_LIMITS
+	@RequestMapping(value = "/bctbUploadLimits", method = RequestMethod.GET)
+	public BatchStatus startBatchBctbUploadLimits() throws JobParametersInvalidException,
+			JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+		JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+				.toJobParameters();
+
+		JobExecution jobExecution = jobLauncher.run(bctbUploadLimitsJob, jobParameters);
+
+		Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_LIMITS");
+		if (csvUploadMonitor.isPresent()) {
+			csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+			csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+			csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+			repo.save(csvUploadMonitor.get());
+		}
+
+		return jobExecution.getStatus();
+	}
+	
+	//3.Bctb_Upload_Parties_Addresses
+		@RequestMapping(value = "/bctbUploadPartiesAddresses", method = RequestMethod.GET)
+		public BatchStatus startBatchBctbUploadPartiesAddresses() throws JobParametersInvalidException,
+				JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+			JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+					.toJobParameters();
+
+			JobExecution jobExecution = jobLauncher.run(bctbUploadPartiesAddressesJob, jobParameters);
+
+			Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_PARTIES_ADDRESSES");
+			if (csvUploadMonitor.isPresent()) {
+				csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+				csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+				csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+				repo.save(csvUploadMonitor.get());
+			}
+
+			return jobExecution.getStatus();
+		}
+		
+				//4.Bctb_Upload_Docs_Clauses
+				@RequestMapping(value = "/bctbUploadDocsClauses", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadDocsClauses() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadDocsClausesJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_DOCS_CLAUSES");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//5.Bctb_Upload_Invoice_Detail
+				@RequestMapping(value = "/bctbUploadInvoiceDetail", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadInvoiceDetail() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadInvoiceDetailJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_INVOICE_DETAIL");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+	
+				//6.Bctb_Upload_Drafts_Details
+				@RequestMapping(value = "/bctbUploadDraftsDetails", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadDraftsDetails() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadDraftsDetailsJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_DRAFTS_DETAILS");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//7.Bctb_Upload_Fft
+				@RequestMapping(value = "/bctbUploadFft", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadFft() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadFftJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_FFT");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//8.Ldtb_Upload_Linkages
+				@RequestMapping(value = "/ldtbUploadLinkages", method = RequestMethod.GET)
+				public BatchStatus startBatchLdtbUploadLinkages() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(ldtbUploadLinkagesJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_LDTB_UPLOAD_LINKAGES");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//9.Tftb_Upload_Fx_Linkage
+				@RequestMapping(value = "/tftbUploadFxLinkage", method = RequestMethod.GET)
+				public BatchStatus startBatchTftbUploadFxLinkage() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(tftbUploadFxLinkageJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_TFTB_UPLOAD_FX_LINKAGES");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//10.Bctm_Upload_Loan_Iccf
+				@RequestMapping(value = "/bctmUploadLoanIccf", method = RequestMethod.GET)
+				public BatchStatus startBatchBctmUploadLoanIccf() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctmUploadLoanIccfJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTM_UPLOAD_LOAN_ICCF");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//11.Bctb_Upload_Master
+				@RequestMapping(value = "/bctbUploadMaster", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadMaster() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadMasterJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_MASTER");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//12.Bctb_Upload_Goods
+				@RequestMapping(value = "/bctbUploadGoods", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadGoods() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadGoodsJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_GOODS");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				
+				
+				//13.Bctb_Upload_Shipment_Info
+				@RequestMapping(value = "/bctbUploadShipmentInfo", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadShipmentInfo() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadShipmentInfoJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_SHIPMENT_INFO");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//14.Bctb_Upload_Pay_Exc
+				@RequestMapping(value = "/bctbUploadPayExc", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadPayExc() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadPayExcJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_PAY_EXC");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//15.Bctb_Upload_Pay_Fate
+				@RequestMapping(value = "/bctbUploadPayFate", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadPayFate() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadPayFateJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_PAY_FATE");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//16.Bctb_Upload_Acc_Exc
+				@RequestMapping(value = "/bctbUploadAccExc", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadAccExc() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadAccExcJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_ACC_EXC");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//17.Bctb_Upload_Acc_Fate
+				@RequestMapping(value = "/bctbUploadAccFate", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadAccFate() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadAccFateJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_ACC_FATE");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//18.Bctb_Upload_Reserve
+				@RequestMapping(value = "/bctbUploadReserve", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadReserve() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadReserveJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_RESERVE");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//19.Bctb_Upload_Invoice_Master
+				@RequestMapping(value = "/bctbUploadInvoiceMaster", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadInvoiceMaster() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadInvoiceMasterJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_INVOICE_MASTER");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//20.Bctb_Upload_Insurance
+				@RequestMapping(value = "/bctbUploadInsurance", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadInsurance() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadInsuranceJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_INSURANCE");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//21.Bctm_Upload_Loan_Preference
+				@RequestMapping(value = "/bctmUploadLoanPreference", method = RequestMethod.GET)
+				public BatchStatus startBatchBctmUploadLoanPreference() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctmUploadLoanPreferenceJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTM_UPLOAD_LOAN_PREFERENCE");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//22.Lctb_Upload_Collateral
+				@RequestMapping(value = "/lctbUploadCollateral", method = RequestMethod.GET)
+				public BatchStatus startBatchLctbUploadCollateral() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(lctbUploadCollateralJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_LCTB_UPLOAD_COLLATERAL");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//23.Bctb_upld_pack_credit_dtls
+				@RequestMapping(value = "/bctbUploadPackCreditDtls", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadPackCreditDtls() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadPackCreditDtlsJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_PACK_CREDIT_DTLS");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//24.Bctb_Upload_Brok_Master
+				@RequestMapping(value = "/bctbUploadBrokMaster", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadBrokMaster() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadBrokMasterJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_BROK_MASTER");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//25.Bctb_Upload_Brok_Detail
+				@RequestMapping(value = "/bctbUploadBrokDetail", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadBrokDetail() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadBrokDetailJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_BROK_DETAIL");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//26.Bctb_Upload_Multitnr
+				@RequestMapping(value = "/bctbUploadMultitnr", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadMultitnr() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadMultitnrJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_MULTITNR");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//27.LCTB_UPLOAD_LIC_UTL_DTL
+				@RequestMapping(value = "/lctbUploadLicUtlDtl", method = RequestMethod.GET)
+				public BatchStatus startBatchLctbUploadLicUtlDtl() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(lctbUploadLicUtlDtlJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_LCTB_UPLOAD_LIC_UTL_DTL");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
+				//28.Bctb_Upload_Assignee_Details
+				@RequestMapping(value = "/bctbUploadAssigneeDetails", method = RequestMethod.GET)
+				public BatchStatus startBatchBctbUploadAssigneeDetails() throws JobParametersInvalidException,
+						JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+
+					JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+							.toJobParameters();
+
+					JobExecution jobExecution = jobLauncher.run(bctbUploadAssigneeDetailsJob, jobParameters);
+
+					Optional<CsvUploadMonitor> csvUploadMonitor = repo.findById("TRANS_BCTB_UPLOAD_ASSIGNEE_DETAILS");
+					if (csvUploadMonitor.isPresent()) {
+						csvUploadMonitor.get().setStart_date(jobExecution.getCreateTime());
+						csvUploadMonitor.get().setEnd_date(jobExecution.getEndTime());
+						csvUploadMonitor.get().setStatus(jobExecution.getStatus().toString());
+						repo.save(csvUploadMonitor.get());
+					}
+
+					return jobExecution.getStatus();
+				}
+				
 
 	/*
 	 * BILLS AND COLLECTIONS Module end here
 	 */
+				
 	/*
 	 * TD and RD Module starts here
 	 */

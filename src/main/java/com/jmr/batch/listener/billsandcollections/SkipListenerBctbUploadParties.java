@@ -52,8 +52,8 @@ public class SkipListenerBctbUploadParties {
 	                  "\tPARTY_TYPE:\t" + model.getParty_type() +
 	                  "\tPARTY_NAME:\t" + model.getParty_name() +
 	                  "\tPARTY_ID:\t" + model.getParty_id() +
-	                  "\tCONV_STATUS:\t" + model.getConv_status() +
-	                  "\tException: " + th.getMessage();
+	                  "\tCONV_STATUS:\t" + model.getConv_status();
+	                  th.getMessage();
 
 	    createFile(processErrPath, data);
 	}
@@ -69,8 +69,9 @@ public class SkipListenerBctbUploadParties {
 	                  "\tPARTY_TYPE:\t" + entity.getId().getPartyType() +
 	                  "\tPARTY_NAME:\t" + entity.getPartyName() +
 	                  "\tPARTY_ID:\t" + entity.getPartyId() +
-	                  "\tCONV_STATUS:\t" + entity.getConvStatus() +
-	                  "\tException: " + th.getMessage();
+	                  "\tCONV_STATUS:\t" + entity.getConvStatus();
+	    
+	                  th.getMessage();
 
 	    createFile(writeErrPath, data);
 	}
